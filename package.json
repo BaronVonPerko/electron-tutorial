@@ -1,0 +1,16 @@
+{
+  "name": "ipc-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron-prebuilt": "^1.4.13",
+    "electron-reload": "^1.1.0"
+  }
+}
