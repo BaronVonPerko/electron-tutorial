@@ -1,21 +1,36 @@
 const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
+const ipc = electron.ipcMain;
+
+const countdown = require('./countdown');
 
 require('electron-reload')(__dirname);
 
-let mainWindow;
+const windows = [];
 
 app.on('ready', _ => {
-    mainWindow = new BrowserWindow({
-        height: 400,
-        width: 400
+    [1, 2, 3].forEach(_ => {
+        let win = new BrowserWindow({
+            height: 400,
+            width: 400
+        });
+
+        win.loadURL(`file:/${__dirname}/countdown.html`);
+
+        win.on('close', _ => {
+            console.log('Window closed.');
+            mainWindow = null;
+        });
+
+        windows.push(win);
     });
+});
 
-    mainWindow.loadURL(`file:/${__dirname}/countdown.html`);
-
-    mainWindow.on('close', _ => {
-        console.log('Window closed.');
-        mainWindow = null;
+ipc.on('countdown-start', _ => {
+    countdown(count => {
+        windows.forEach(win => {
+            win.webContents.send('countdown', count);
+        });
     });
 });
